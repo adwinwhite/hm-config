@@ -62,6 +62,7 @@
         nnoremap : q:i
         inoremap <C-s> <Esc>:w<CR>a
         nnoremap <C-s> :w<CR>
+        nnoremap <F6> :source ~/.config/nvim/init.vim<cr>
 
         " Completion-nvim
         " Use completion-nvim in every buffer
@@ -88,6 +89,11 @@
         let g:NERDSpaceDelims = 1
         " Enable trimming of trailing whitespace when uncommenting
         let g:NERDTrimTrailingWhitespace = 1
+
+        " Telescope
+        nnoremap <C-t> :lua require'telescope.builtin'.file_browser()<cr>
+        nnoremap <C-f> :lua require'telescope.builtin'.live_grep()<cr>
+
 
 
         lua << EOF
