@@ -4,7 +4,7 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.packges = with pkgs; [
+  home.packages = with pkgs; [
     nodePackages.pyright
     rnix-lsp
   ];
@@ -15,81 +15,101 @@
       package = pkgs.neovim-nightly;
       vimAlias = true;
       viAlias = true;
-      defaultEditor = true;
-      configure = {
-        customRC = ''
-          set wildmode=longest,list,full
-          syntax on
-          set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
-          set backspace=indent,eol,start
-          set number
-          set showcmd
-          set ignorecase
-          set autoindent
-          set incsearch
-          set nowrap
-          set scrolloff=8
-          set sidescroll=1
-          set sidescrolloff=8
-          set cmdwinheight=1
-          set clipboard+=unnamedplus
-          
-          filetype plugin indent on
-          let g:tex_flavor = "latex"
-          
-          
-          " Custom mappings
-          let mapleader=";"
-          inoremap jj <Esc>
-          nnoremap : q:i
-          inoremap <C-s> <Esc>:w<CR>a
-          nnoremap <C-s> :w<CR>
-           " Cycle through completions with tab
-          inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-          inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-          set completeopt=menuone,noinsert,noselect
-          set shortmess+=c
-          " Nerd commenter
-          "
-          " Use compact syntax for prettified multi-line comments
-          let g:NERDCompactSexyComs = 1
-          " Add spaces after comment delimiters by default
-          let g:NERDSpaceDelims = 1
-          " Enable trimming of trailing whitespace when uncommenting
-          let g:NERDTrimTrailingWhitespace = 1
+      extraConfig = ''
+        set wildmode=longest,list,full
+        syntax on
+        set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+        set backspace=indent,eol,start
+        set number
+        set showcmd
+        set ignorecase
+        set autoindent
+        set incsearch
+        set nowrap
+        set scrolloff=8
+        set sidescroll=1
+        set sidescrolloff=8
+        set cmdwinheight=1
+        set clipboard+=unnamedplus
+        
+        filetype plugin indent on
+        let g:tex_flavor = "latex"
 
-          " Use completion-nvim in every buffer
-          autocmd BufEnter * lua require'completion'.on_attach()
+        " Airline
+        let g:airline_powerline_fonts = 1
+        let g:airline#extensions#tabline#enabled = 1
 
-          lua << EOF
-          local nvim_lsp = require('lspconfig')
-          nvim_lsp['pyright'].setup {}
-          nvim_lsp['clangd'].setup {}
-          nvim_lsp['rnix'].setup {}
 
-          require'nvim-treesitter.configs'.setup {
-            ensure_installed = "maintained",
-            highlight = {
-              enable = true,
-            },
-          }
-          EOF
-          '';
-          packages.vim = {
-          start = with pkgs.vimPlugins; [
-            onedark-nvim
-            vim-airline
-            vim-airline-themes
-            nvim-lspconfig
-            nvim-treesitter
-            completion-nvim
-            telescope-nvim
-            friendly-snippets
-            vim-nix
-            nerdcommenter
-          ];
-        };
-      };
+        " Color scheme
+        let g:onedark_hide_endofbuffer = 1
+        let g:onedark_terminal_italics = 1
+        let g:onedark_termcolors = 256
+        let g:airline_theme='onedark'
+        colorscheme onedark
+        set termguicolors
+
+        " Fold
+        set foldmethod=syntax
+        set foldlevel=0
+        set foldnestmax=1
+        " set foldclose=all
+        " hi Folded ctermbg=242
+        
+        
+        " Custom mappings
+        let mapleader=";"
+        inoremap jj <Esc>
+        nnoremap : q:i
+        inoremap <C-s> <Esc>:w<CR>a
+        nnoremap <C-s> :w<CR>
+
+        " Completion-nvim
+        " Use completion-nvim in every buffer
+        autocmd BufEnter * lua require'completion'.on_attach()
+         " Cycle through completions with tab
+        inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+        set completeopt=menuone,noinsert,noselect
+        set shortmess+=c
+        let g:completion_enable_snippet = 'vim-vsnip'
+        let g:completion_chain_complete_list = [
+            \{'complete_items': ['lsp', 'buffers']},
+            \{'complete_items': ['snippet']},
+            \{'mode': '<c-p>'},
+            \{'mode': '<c-n>'}
+        \]
+        let g:completion_auto_change_source = 1
+        let g:completion_matching_ignore_case = 1
+
+        " Nerd commenter
+        " Use compact syntax for prettified multi-line comments
+        let g:NERDCompactSexyComs = 1
+        " Add spaces after comment delimiters by default
+        let g:NERDSpaceDelims = 1
+        " Enable trimming of trailing whitespace when uncommenting
+        let g:NERDTrimTrailingWhitespace = 1
+
+
+        lua << EOF
+        local nvim_lsp = require'lspconfig'
+        nvim_lsp.pyright.setup {}
+        nvim_lsp.clangd.setup {}
+        nvim_lsp.rnix.setup {}
+        EOF
+      '';
+      plugins = with pkgs.vimPlugins; [
+        onedark-vim
+        vim-airline
+        vim-airline-themes
+        nvim-lspconfig
+        completion-nvim
+        telescope-nvim
+        completion-buffers
+        vim-vsnip
+        friendly-snippets
+        vim-nix
+        nerdcommenter
+      ];
     };
   };
 
@@ -106,5 +126,5 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.11";
+  # home.stateVersion = "21.11";
 }

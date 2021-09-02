@@ -16,7 +16,7 @@
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, neovim, ... }: {
-    homeManagerConfigurations = {
+    homeConfigurations = {
       adwin = home-manager.lib.homeManagerConfiguration {
         configuration = { pkgs, lib, ... }: {
           imports = [ ./home.nix ];
@@ -27,6 +27,8 @@
           };
         };
         system = "x86_64-linux";
+        homeDirectory = "/home/adwin";
+        username = "adwin";
       };
     };
   };
