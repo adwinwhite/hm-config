@@ -93,6 +93,7 @@
         " Telescope
         nnoremap <C-t> :lua require'telescope.builtin'.file_browser()<cr>
         nnoremap <C-f> :lua require'telescope.builtin'.live_grep()<cr>
+        nnoremap <C-d> :lua require'telescope.builtin'.lsp_definitions()<cr>
 
 
 
@@ -101,6 +102,21 @@
         nvim_lsp.pyright.setup {}
         nvim_lsp.clangd.setup {}
         nvim_lsp.rnix.setup {}
+
+        local actions = require('telescope.actions')
+        require('telescope').setup{
+          defaults = {
+            mappings = {
+              i = {
+                ["<Tab>"] = false,
+              },
+              n = {
+                ["<Tab>"] = false,
+                ["<C-c>"] = actions.close,
+              },
+            },
+          }
+        }
         EOF
       '';
       plugins = with pkgs.vimPlugins; [
