@@ -63,7 +63,7 @@
 
         " Fold
         " set foldmethod=syntax
-        set foldlevel=0
+        set foldlevel=2
         set foldnestmax=2
         " set foldclose=all
         " hi Folded ctermbg=242
