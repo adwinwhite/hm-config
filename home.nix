@@ -10,6 +10,17 @@
     ccls
     rust-analyzer
   ];
+  xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
+  xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
+  xdg.configFile."nvim/parser/lua.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
+  xdg.configFile."nvim/parser/rust.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
+  xdg.configFile."nvim/parser/python.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-python}/parser";
+  xdg.configFile."nvim/parser/nix.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+  xdg.configFile."nvim/parser/json.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
+  xdg.configFile."nvim/parser/latex.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-latex}/parser";
+  xdg.configFile."nvim/parser/go.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-go}/parser";
+  xdg.configFile."nvim/parser/markdown.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
+  xdg.configFile."nvim/parser/julia.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-julia}/parser";
 
   programs = {
     neovim = {
@@ -19,7 +30,7 @@
       viAlias = true;
       extraConfig = ''
         set wildmode=longest,list,full
-        syntax on
+        " syntax on
         set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
         set backspace=indent,eol,start
         set number
@@ -51,11 +62,13 @@
         set termguicolors
 
         " Fold
-        set foldmethod=syntax
+        " set foldmethod=syntax
         set foldlevel=0
-        set foldnestmax=1
+        set foldnestmax=2
         " set foldclose=all
         " hi Folded ctermbg=242
+        set foldmethod=expr
+        set foldexpr=nvim_treesitter#foldexpr()
         
         
         " Custom mappings
@@ -114,6 +127,12 @@
           }
         }
 
+        require'nvim-treesitter.configs'.setup {
+          highlight = {
+            enable = true,             
+          },
+        }
+
         local actions = require('telescope.actions')
         require('telescope').setup{
           defaults = {
@@ -135,6 +154,7 @@
         vim-airline
         vim-airline-themes
         nvim-lspconfig
+        nvim-treesitter
         completion-nvim
         telescope-nvim
         completion-buffers
