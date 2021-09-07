@@ -7,6 +7,8 @@
   home.packages = with pkgs; [
     nodePackages.pyright
     rnix-lsp
+    ccls
+    rust-analyzer
   ];
 
   programs = {
@@ -102,8 +104,15 @@
         lua << EOF
         local nvim_lsp = require'lspconfig'
         nvim_lsp.pyright.setup {}
-        nvim_lsp.clangd.setup {}
         nvim_lsp.rnix.setup {}
+        nvim_lsp.rust_analyzer.setup {}
+        nvim_lsp.ccls.setup {
+          init_options = {
+            cache = {
+              directory = ".ccls-cache";
+            };
+          }
+        }
 
         local actions = require('telescope.actions')
         require('telescope').setup{
