@@ -9,6 +9,7 @@
     rnix-lsp
     ccls
     rust-analyzer
+    clang
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
   xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
@@ -31,7 +32,7 @@
       extraConfig = ''
         set wildmode=longest,list,full
         " syntax on
-        set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+        set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
         set backspace=indent,eol,start
         set number
         set showcmd
@@ -112,6 +113,9 @@
         nnoremap <C-f> :lua require'telescope.builtin'.live_grep()<cr>
         nnoremap <C-d> :lua require'telescope.builtin'.lsp_definitions()<cr>
 
+        " Formatter
+        nnoremap <silent> <leader><Space>f :Format<CR>
+
 
 
         lua << EOF
@@ -147,6 +151,49 @@
             },
           }
         }
+        require('formatter').setup({
+          filetype = {
+            c = {
+               function()
+                  return {
+                    exe = "clang-format",
+                    args = {"--assume-filename", vim.api.nvim_buf_get_name(0), "--sort-includes=0"},
+                    stdin = true,
+                    cwd = vim.fn.expand('%:p:h')  -- Run clang-format in cwd of the file.
+                  }
+                end
+            },
+            cpp = {
+               function()
+                  return {
+                    exe = "clang-format",
+                    args = {"--assume-filename", vim.api.nvim_buf_get_name(0)},
+                    stdin = true,
+                    cwd = vim.fn.expand('%:p:h')  -- Run clang-format in cwd of the file.
+                  }
+                end
+            },
+            rust = {
+              function()
+                return {
+                  exe = "rustfmt",
+                  args = {"--emit=stdout"},
+                  stdin = true
+                }
+              end
+            },
+          }
+        })
+
+        vim.opt.listchars = {
+          space = "⋅",
+          eol = "↴",
+        }
+
+        require("indent_blankline").setup {
+            space_char_blankline = " ",
+            show_current_context = true,
+        }
         EOF
       '';
       plugins = with pkgs.vimPlugins; [
@@ -162,6 +209,8 @@
         friendly-snippets
         vim-nix
         nerdcommenter
+        formatter-nvim
+        indent-blankline-nvim
       ];
     };
   };
