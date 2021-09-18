@@ -10,6 +10,7 @@
     ccls
     rust-analyzer
     clang
+    gopls
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
   xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
@@ -32,7 +33,7 @@
       extraConfig = ''
         set wildmode=longest,list,full
         " syntax on
-        set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+        " set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
         set backspace=indent,eol,start
         set number
         set showcmd
@@ -123,6 +124,7 @@
         nvim_lsp.pyright.setup {}
         nvim_lsp.rnix.setup {}
         nvim_lsp.rust_analyzer.setup {}
+        nvim_lsp.gopls.setup {}
         nvim_lsp.ccls.setup {
           init_options = {
             cache = {
@@ -182,6 +184,14 @@
                 }
               end
             },
+            go = {
+              function()
+                return {
+                  exe = "gofmt",
+                  args = { vim.api.nvim_buf_get_name(0)},
+                }
+              end
+            },
           }
         })
 
@@ -211,6 +221,7 @@
         nerdcommenter
         formatter-nvim
         indent-blankline-nvim
+        vim-sleuth
       ];
     };
   };
