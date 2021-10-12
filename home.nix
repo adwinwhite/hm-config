@@ -25,6 +25,7 @@
   xdg.configFile."nvim/parser/julia.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-julia}/parser";
 
   programs = {
+    go.enable = true;
     neovim = {
       enable = true;
       package = pkgs.neovim-nightly;
@@ -92,7 +93,7 @@
         let g:completion_enable_snippet = 'vim-vsnip'
         let g:completion_chain_complete_list = {
             \ 'default': [
-            \    {'complete_items': ['lsp', 'buffers', 'path', 'snippet']},
+            \    {'complete_items': ['lsp', 'path', 'snippet']},
             \    {'mode': '<c-p>'},
             \    {'mode': '<c-n>'}
             \],
