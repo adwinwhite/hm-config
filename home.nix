@@ -11,6 +11,8 @@
     rust-analyzer
     clang
     gopls
+    tealdeer
+    rust-bin.stable.latest.default
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
   xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
@@ -81,6 +83,8 @@
         inoremap <C-s> <Esc>:w<CR>a
         nnoremap <C-s> :w<CR>
         nnoremap <F6> :source ~/.config/nvim/init.vim<cr>
+        nnoremap <Leader>en :lua vim.lsp.diagnostic.goto_next()<cr>
+        nnoremap <Leader>ep :lua vim.lsp.diagnostic.goto_prev()<cr>
 
         " Completion-nvim
         " Use completion-nvim in every buffer
