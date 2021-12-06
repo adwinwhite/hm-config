@@ -11,7 +11,9 @@
     rust-analyzer
     clang
     gopls
+    delve
     tealdeer
+    graphviz
     rust-bin.stable.latest.default
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
@@ -41,6 +43,7 @@
         set number
         set showcmd
         set ignorecase
+        set smartcase
         set autoindent
         set incsearch
         set nowrap
@@ -63,8 +66,14 @@
         let g:onedark_terminal_italics = 1
         let g:onedark_termcolors = 256
         let g:airline_theme='onedark'
-        colorscheme onedark
-        set termguicolors
+        if !exists('g:loaded_color')
+          let g:loaded_color = 1
+
+          " Put your favorite colorscheme here
+          colorscheme onedark
+          set termguicolors
+        endif
+
 
         " Fold
         " set foldmethod=syntax
@@ -84,7 +93,7 @@
         nnoremap <C-s> :w<CR>
         nnoremap <F6> :source ~/.config/nvim/init.vim<cr>
         nnoremap <Leader>en :lua vim.lsp.diagnostic.goto_next()<cr>
-        nnoremap <Leader>ep :lua vim.lsp.diagnostic.goto_prev()<cr>
+        nnoremap <Leader>eN :lua vim.lsp.diagnostic.goto_prev()<cr>
 
         " Completion-nvim
         " Use completion-nvim in every buffer
@@ -199,6 +208,14 @@
                 return {
                   exe = "gofmt",
                   args = { vim.api.nvim_buf_get_name(0)},
+                  stdin = true
+                }
+              end
+            },
+            json = {
+              function()
+                return {
+                  exe = "jq",
                   stdin = true
                 }
               end
