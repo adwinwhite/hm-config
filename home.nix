@@ -15,6 +15,8 @@
     tealdeer
     graphviz
     rust-bin.stable.latest.default
+    poetry
+    v2t
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
   xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
