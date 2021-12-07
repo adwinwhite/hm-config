@@ -17,6 +17,7 @@
     rust-bin.stable.latest.default
     poetry
     v2t
+    fortran-language-server
   ];
   xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";
   xdg.configFile."nvim/parser/cpp.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-cpp}/parser";
@@ -142,6 +143,7 @@
 
         lua << EOF
         local nvim_lsp = require'lspconfig'
+        nvim_lsp.fortls.setup {}
         nvim_lsp.pyright.setup {}
         nvim_lsp.rnix.setup {}
         nvim_lsp.rust_analyzer.setup {}
